@@ -2492,9 +2492,7 @@ static int rx_bottom(struct r8152 *tp, int budget)
 			if (work_done < budget) {
 				if (!rtl_rx_vlan_tag(tp, rx_desc, skb))
 					napi_gro_receive(napi, skb);
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)
 				netdev->last_rx = jiffies;
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29) */
 				work_done++;
 				stats->rx_packets++;
 				stats->rx_bytes += skb->len;
