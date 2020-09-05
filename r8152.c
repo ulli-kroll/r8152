@@ -19164,7 +19164,6 @@ static int rtl8152_probe(struct usb_interface *intf,
 	netdev->features &= ~(NETIF_F_TSO | NETIF_F_TSO6);
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26) */
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,10,0)
 	/* MTU range: 68 - 1500 or 9194 */
 	netdev->min_mtu = ETH_MIN_MTU;
 	switch (tp->version) {
@@ -19176,7 +19175,6 @@ static int rtl8152_probe(struct usb_interface *intf,
 		netdev->max_mtu = RTL8153_MAX_MTU;
 		break;
 	}
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(4,10,0) */
 
 	tp->mii.dev = netdev;
 	tp->mii.mdio_read = read_mii_word;
