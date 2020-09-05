@@ -9,13 +9,6 @@
 #include <linux/version.h>
 #include <linux/in.h>
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,31)
-	#include <linux/mdio.h>
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,7,0)
-	#include <uapi/linux/mdio.h>
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,7,0) */
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,31) */
-
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5,0,0)
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4,20,0)
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4,12,0)
