@@ -2731,8 +2731,6 @@ static void rtl8152_set_rx_mode(struct net_device *netdev)
 	netif_wake_queue(netdev);
 }
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,4)
-
 static inline bool rtl_gso_check(struct net_device *dev, struct sk_buff *skb)
 {
 	struct r8152 *tp = netdev_priv(dev);
@@ -2760,7 +2758,6 @@ rtl8152_features_check(struct sk_buff *skb, struct net_device *dev,
 
 	return features;
 }
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,4) */
 
 static netdev_tx_t rtl8152_start_xmit(struct sk_buff *skb,
 				      struct net_device *netdev)
@@ -17059,9 +17056,7 @@ static const struct net_device_ops rtl8152_netdev_ops = {
 	.ndo_set_mac_address	= rtl8152_set_mac_address,
 	.ndo_change_mtu		= rtl8152_change_mtu,
 	.ndo_validate_addr	= eth_validate_addr,
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,4)
 	.ndo_features_check	= rtl8152_features_check,
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,4) */
 };
 #endif
 
