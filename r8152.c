@@ -16198,7 +16198,6 @@ static void rtl8152_get_drvinfo(struct net_device *netdev,
 	usb_make_path(tp->udev, info->bus_info, sizeof(info->bus_info));
 }
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0)
 static int rtl8152_get_link_ksettings(struct net_device *netdev,
 				      struct ethtool_link_ksettings *cmd)
 {
@@ -16403,7 +16402,6 @@ static int rtl8152_set_link_ksettings(struct net_device *dev,
 out:
 	return ret;
 }
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0) */
 
 static const char rtl8152_gstrings[][ETH_GSTRING_LEN] = {
 	"tx_packets",
@@ -16796,10 +16794,8 @@ static const struct ethtool_ops ops = {
 	.set_coalesce = rtl8152_set_coalesce,
 	.get_eee = rtl_ethtool_get_eee,
 	.set_eee = rtl_ethtool_set_eee,
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0)
 	.get_link_ksettings = rtl8152_get_link_ksettings,
 	.set_link_ksettings = rtl8152_set_link_ksettings,
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0) */
 	.begin = rtl8152_ethtool_begin,
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0)
 	.get_tunable = rtl8152_get_tunable,
