@@ -17633,7 +17633,6 @@ static int rtl8152_change_mtu(struct net_device *dev, int new_mtu)
 	return ret;
 }
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)
 static const struct net_device_ops rtl8152_netdev_ops = {
 	.ndo_open		= rtl8152_open,
 	.ndo_stop		= rtl8152_close,
@@ -17647,7 +17646,6 @@ static const struct net_device_ops rtl8152_netdev_ops = {
 	.ndo_validate_addr	= eth_validate_addr,
 	.ndo_features_check	= rtl8152_features_check,
 };
-#endif
 
 static void rtl8152_unload(struct r8152 *tp)
 {
