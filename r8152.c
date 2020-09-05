@@ -2664,56 +2664,23 @@ static void bottom_half(unsigned long data)
 	tx_bottom(tp);
 }
 
-static inline int __r8152_poll(struct r8152 *tp, int budget)
+static int r8152_poll(struct napi_struct *napi, int budget)
 {
-	struct napi_struct *napi = &tp->napi;
+	struct r8152 *tp = container_of(napi, struct r8152, napi);
 	int work_done;
 
 	work_done = rx_bottom(tp, budget);
 
 	if (work_done < budget) {
-#if LINUX_VERSION_CODE < KERNEL_VERSION(4,10,0)
-		napi_complete_done(napi, work_done);
-#else
 		if (!napi_complete_done(napi, work_done))
 			goto out;
-#endif
 		if (!list_empty(&tp->rx_done))
 			napi_schedule(napi);
 	}
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,10,0)
 out:
-#endif
 	return work_done;
 }
-
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24)
-
-static int r8152_poll(struct net_device *dev, int *budget)
-{
-	struct r8152 *tp = netdev_priv(dev);
-	int quota = min(dev->quota, *budget);
-	int work_done;
-
-	work_done = __r8152_poll(tp, quota);
-
-	*budget -= work_done;
-	dev->quota -= work_done;
-
-	return (work_done >= quota);
-}
-
-#else
-
-static int r8152_poll(struct napi_struct *napi, int budget)
-{
-	struct r8152 *tp = container_of(napi, struct r8152, napi);
-
-	return __r8152_poll(tp, budget);
-}
-
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24) */
 
 static
 int r8152_submit_rx(struct r8152 *tp, struct rx_agg *agg, gfp_t mem_flags)
