@@ -2452,10 +2452,6 @@ static int rx_bottom(struct r8152 *tp, int budget)
 #endif
 
 			work_done++;
-
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)
-			netdev->last_rx = jiffies;
-#endif
 			stats->rx_packets++;
 			stats->rx_bytes += pkt_len;
 		}
