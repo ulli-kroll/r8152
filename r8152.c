@@ -1473,17 +1473,6 @@ static int set_ethernet_addr(struct r8152 *tp)
 	return ret;
 }
 
-static inline struct net_device_stats *rtl8152_get_stats(struct net_device *dev)
-{
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22)
-	struct rtl8152 *tp = netdev_priv(dev);
-
-	return (struct net_device_stats *)&tp->stats;
-#else
-	return &dev->stats;
-#endif
-}
-
 static void read_bulk_callback(struct urb *urb)
 {
 	struct net_device *netdev;
@@ -1564,7 +1553,7 @@ static void write_bulk_callback(struct urb *urb)
 		return;
 
 	netdev = tp->netdev;
-	stats = rtl8152_get_stats(netdev);
+	stats = &netdev->stats;
 	if (status) {
 		if (net_ratelimit())
 			netif_warn(tp, tx_err, netdev,
@@ -1616,7 +1605,7 @@ static void write_bulk_sg_callback(struct urb *urb)
 
 	while (!skb_queue_empty(&agg->tx_skb)) {
 		struct sk_buff *skb = __skb_dequeue(&agg->tx_skb);
-		struct net_device_stats *stats = rtl8152_get_stats(netdev);
+		struct net_device_stats *stats = &netdev->stats;
 
 		if (status) {
 			stats->tx_errors += skb_shinfo(skb)->gso_segs ?: 1;
@@ -1937,7 +1926,7 @@ static void r8152_csum_workaround(struct r8152 *tp, struct sk_buff *skb,
 		struct net_device_stats *stats;
 
 drop:
-		stats = rtl8152_get_stats(tp->netdev);
+		stats = &tp->netdev->stats;
 		stats->tx_dropped++;
 		dev_kfree_skb(skb);
 	}
@@ -2256,7 +2245,7 @@ static int r8152_tx_agg_sg_fill(struct r8152 *tp, struct tx_agg *agg)
 			if (!tx_skb) {
 				struct net_device_stats *stats;
 
-				stats = rtl8152_get_stats(tp->netdev);
+				stats = &tp->netdev->stats;
 				stats->tx_dropped++;
 				netif_wake_queue(tp->netdev);
 				return NETDEV_TX_OK;
@@ -2449,7 +2438,7 @@ static int rx_bottom(struct r8152 *tp, int budget)
 				break;
 
 			pkt_len = skb->len;
-			stats = rtl8152_get_stats(netdev);
+			stats = &netdev->stats;
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
 			vlan_tci = rtl_vlan_get_tag(skb);
 
@@ -2502,7 +2491,7 @@ static int rx_bottom(struct r8152 *tp, int budget)
 
 		while (urb->actual_length > len_used) {
 			struct net_device *netdev = tp->netdev;
-			struct net_device_stats *stats;
+			struct net_device_stats *stats = &netdev->stats;
 			unsigned int pkt_len, rx_frag_head_sz;
 			struct sk_buff *skb;
 
@@ -2517,8 +2506,6 @@ static int rx_bottom(struct r8152 *tp, int budget)
 			len_used += pkt_len;
 			if (urb->actual_length < len_used)
 				break;
-
-			stats = rtl8152_get_stats(netdev);
 
 			pkt_len -= ETH_FCS_LEN;
 			rx_data += sizeof(struct rx_desc);
@@ -2770,7 +2757,7 @@ int r8152_submit_rx(struct r8152 *tp, struct rx_agg *agg, gfp_t mem_flags)
 
 static void rtl_drop_queued_tx(struct r8152 *tp)
 {
-	struct net_device_stats *stats = rtl8152_get_stats(tp->netdev);
+	struct net_device_stats *stats = &tp->netdev->stats;
 	struct sk_buff_head skb_head, *tx_queue = &tp->tx_queue;
 	struct sk_buff *skb;
 
