@@ -16985,10 +16985,8 @@ static const struct ethtool_ops ops = {
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0) */
 	.get_coalesce = rtl8152_get_coalesce,
 	.set_coalesce = rtl8152_set_coalesce,
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
 	.get_eee = rtl_ethtool_get_eee,
 	.set_eee = rtl_ethtool_set_eee,
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0)
 	.get_link_ksettings = rtl8152_get_link_ksettings,
 	.set_link_ksettings = rtl8152_set_link_ksettings,
