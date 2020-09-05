@@ -3257,43 +3257,6 @@ static void rtl_rx_vlan_en(struct r8152 *tp, bool enable)
 	}
 }
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
-
-static void
-rtl8152_vlan_rx_register(struct net_device *dev, struct vlan_group *grp)
-{
-	struct r8152 *tp = netdev_priv(dev);
-
-	if (unlikely(tp->rtk_enable_diag))
-		return;
-
-	if (usb_autopm_get_interface(tp->intf) < 0)
-		return;
-
-	mutex_lock(&tp->control);
-
-	tp->vlgrp = grp;
-	if (tp->vlgrp)
-		rtl_rx_vlan_en(tp, true);
-	else
-		rtl_rx_vlan_en(tp, false);
-
-	mutex_unlock(&tp->control);
-}
-
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22)
-
-static void rtl8152_vlan_rx_kill_vid(struct net_device *dev, unsigned short vid)
-{
-	struct r8152 *tp = netdev_priv(dev);
-
-	vlan_group_set_device(tp->vlgrp, vid, NULL);
-}
-
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22) */
-
-#else
-
 static int rtl8152_set_features(struct net_device *dev,
 				netdev_features_t features)
 {
@@ -3324,8 +3287,6 @@ static int rtl8152_set_features(struct net_device *dev,
 out:
 	return ret;
 }
-
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0) */
 
 #define WAKE_ANY (WAKE_PHY | WAKE_MAGIC | WAKE_UCAST | WAKE_BCAST | WAKE_MCAST)
 
@@ -17093,11 +17054,7 @@ static const struct net_device_ops rtl8152_netdev_ops = {
 	.ndo_do_ioctl		= rtl8152_ioctl,
 	.ndo_start_xmit		= rtl8152_start_xmit,
 	.ndo_tx_timeout		= rtl8152_tx_timeout,
-#if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
-	.ndo_vlan_rx_register	= rtl8152_vlan_rx_register,
-#else
 	.ndo_set_features	= rtl8152_set_features,
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0) */
 	.ndo_set_rx_mode	= rtl8152_set_rx_mode,
 	.ndo_set_mac_address	= rtl8152_set_mac_address,
 	.ndo_change_mtu		= rtl8152_change_mtu,
