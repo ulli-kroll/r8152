@@ -1965,61 +1965,14 @@ static inline void rtl_tx_vlan_tag(struct tx_desc *desc, struct sk_buff *skb)
 	}
 }
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
-
-static inline bool
-rtl_rx_vlan_tag(struct r8152 *tp, struct rx_desc *desc, struct sk_buff *skb)
-{
-	u32 opts2 = le32_to_cpu(desc->opts2);
-
-	if (tp->vlgrp && (opts2 & RX_VLAN_TAG)) {
-		vlan_gro_receive(&tp->napi, tp->vlgrp, swab16(opts2 & 0xffff),
-				 skb);
-		return true;
-	}
-
-	return false;
-}
-
-static inline void
-rtl_vlan_put_tag(struct r8152 *tp, struct rx_desc *desc, struct sk_buff *skb)
-{
-	u32 opts2 = le32_to_cpu(desc->opts2);
-
-	if (tp->vlgrp && (opts2 & RX_VLAN_TAG))
-		__vlan_hwaccel_put_tag(skb, swab16(opts2 & 0xffff));
-}
-
-static inline __u16
-rtl_vlan_get_tag(struct sk_buff *skb)
-{
-	__u16 tag;
-
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27)
-	__vlan_hwaccel_get_tag(skb, &tag);
-#else
-	tag = skb->vlan_tci;
-#endif
-
-	return tag;
-}
-
-#else
-
 static inline void rtl_rx_vlan_tag(struct rx_desc *desc, struct sk_buff *skb)
 {
 	u32 opts2 = le32_to_cpu(desc->opts2);
 
 	if (opts2 & RX_VLAN_TAG)
-#if LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0)
-		__vlan_hwaccel_put_tag(skb, swab16(opts2 & 0xffff));
-#else
 		__vlan_hwaccel_put_tag(skb, htons(ETH_P_8021Q),
 				       swab16(opts2 & 0xffff));
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3,10,0) */
 }
-
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0) */
 
 static int r8152_tx_csum(struct r8152 *tp, struct tx_desc *desc,
 			 struct sk_buff *skb, u32 len, u32 transport_offset)
