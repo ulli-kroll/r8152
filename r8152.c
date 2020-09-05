@@ -2483,9 +2483,6 @@ static int rx_bottom(struct r8152 *tp, int budget)
 				get_page(agg->page);
 			}
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22)
-			skb->dev = netdev;
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22) */
 			skb->protocol = eth_type_trans(skb, netdev);
 			rtl_rx_vlan_tag(rx_desc, skb);
 			if (work_done < budget) {
