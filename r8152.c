@@ -2678,18 +2678,10 @@ static void rtl8152_tx_timeout(struct net_device *netdev, unsigned int txqueue)
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0) */
 {
 	struct r8152 *tp = netdev_priv(netdev);
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)
-	int i;
-#endif
 
 	netif_warn(tp, tx_err, netdev, "Tx timeout\n");
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)
-	for (i = 0; i < RTL8152_MAX_TX; i++)
-		usb_unlink_urb(tp->tx_info[i].urb);
-#else
 	usb_queue_reset_device(tp->intf);
-#endif
 }
 
 static void rtl8152_set_rx_mode(struct net_device *netdev)
