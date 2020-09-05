@@ -16353,12 +16353,6 @@ static const char rtl8152_gstrings[][ETH_GSTRING_LEN] = {
 	"tx_underrun",
 };
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,33)
-static int rtl8152_get_sset_count(struct net_device *dev)
-{
-	return ARRAY_SIZE(rtl8152_gstrings);
-}
-#else
 static int rtl8152_get_sset_count(struct net_device *dev, int sset)
 {
 	switch (sset) {
@@ -16368,7 +16362,6 @@ static int rtl8152_get_sset_count(struct net_device *dev, int sset)
 		return -EOPNOTSUPP;
 	}
 }
-#endif
 
 static void rtl8152_get_ethtool_stats(struct net_device *dev,
 				      struct ethtool_stats *stats, u64 *data)
