@@ -1,0 +1,5 @@
+*r8152.mod*
+*r8152.ko*
+*r8152.o*
+Module.symvers
+modules.order
