@@ -19112,24 +19112,7 @@ static int rtl8152_probe(struct usb_interface *intf,
 		tp->sg_use = true;
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(5,2,3) */
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)
-	netdev->open = rtl8152_open;
-	netdev->stop = rtl8152_close;
-	netdev->get_stats = rtl8152_get_stats;
-	netdev->hard_start_xmit = rtl8152_start_xmit;
-	netdev->tx_timeout = rtl8152_tx_timeout;
-	netdev->change_mtu = rtl8152_change_mtu;
-	netdev->set_mac_address = rtl8152_set_mac_address;
-	netdev->do_ioctl = rtl8152_ioctl;
-	netdev->set_multicast_list = rtl8152_set_rx_mode;
-	netdev->vlan_rx_register = rtl8152_vlan_rx_register;
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22)
-	netdev->vlan_rx_kill_vid = rtl8152_vlan_rx_kill_vid;
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22) */
-#else
 	netdev->netdev_ops = &rtl8152_netdev_ops;
-#endif /* HAVE_NET_DEVICE_OPS */
-
 	netdev->watchdog_timeo = RTL8152_TX_TIMEOUT;
 
 	netdev->features |= NETIF_F_RXCSUM | NETIF_F_IP_CSUM | NETIF_F_SG |
