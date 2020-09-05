@@ -18512,9 +18512,7 @@ static ssize_t sg_en_store(struct device *dev, struct device_attribute *attr,
 		return -EINVAL;
 	}
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26)
 	netif_set_gso_max_size(netdev, tso_size);
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26) */
 
 	return count;
 }
