@@ -18003,12 +18003,8 @@ static int rtl8152_probe(struct usb_interface *intf,
 		tp->lenovo_macpassthru = 1;
 
 	netdev->ethtool_ops = &ops;
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26)
 	if (!tp->sg_use)
 		netif_set_gso_max_size(netdev, RTL_LIMITED_TSO_SIZE);
-#else
-	netdev->features &= ~(NETIF_F_TSO | NETIF_F_TSO6);
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26) */
 
 	/* MTU range: 68 - 1500 or 9194 */
 	netdev->min_mtu = ETH_MIN_MTU;
