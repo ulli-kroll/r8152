@@ -811,9 +811,6 @@ struct r8152 {
 	struct delayed_work schedule, hw_phy_work;
 	struct mii_if_info mii;
 	struct mutex control;	/* use for hw setting */
-#if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
-	struct vlan_group *vlgrp;
-#endif
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23) && defined(CONFIG_PM_SLEEP)
 	struct notifier_block pm_notifier;
 #endif
