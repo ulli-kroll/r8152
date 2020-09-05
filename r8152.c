@@ -17280,7 +17280,6 @@ static int rtl8152_ethtool_begin(struct net_device *netdev)
 	return 0;
 }
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0)
 static int rtl8152_get_tunable(struct net_device *netdev,
 			       const struct ethtool_tunable *tunable, void *d)
 {
@@ -17331,7 +17330,6 @@ static int rtl8152_set_tunable(struct net_device *netdev,
 
 	return 0;
 }
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0) */
 
 static void rtl8152_get_ringparam(struct net_device *netdev,
 				  struct ethtool_ringparam *ring)
@@ -17386,10 +17384,8 @@ static const struct ethtool_ops ops = {
 	.get_link_ksettings = rtl8152_get_link_ksettings,
 	.set_link_ksettings = rtl8152_set_link_ksettings,
 	.begin = rtl8152_ethtool_begin,
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0)
 	.get_tunable = rtl8152_get_tunable,
 	.set_tunable = rtl8152_set_tunable,
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0) */
 	.get_ringparam = rtl8152_get_ringparam,
 	.set_ringparam = rtl8152_set_ringparam,
 };
