@@ -18577,11 +18577,7 @@ static int rtl8152_probe(struct usb_interface *intf,
 		return -ENODEV;
 
 	if (!rtl_vendor_mode(intf)) {
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,19)
-		dev_err(&intf->dev, "The kernel too old to set configuration\n");
-#else
 		usb_driver_set_configuration(udev, 1);
-#endif
 		return -ENODEV;
 	}
 
