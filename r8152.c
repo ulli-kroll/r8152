@@ -2727,21 +2727,6 @@ static void rtl8152_set_rx_mode(struct net_device *netdev)
 		mc_filter[1] = 0xffffffff;
 		mc_filter[0] = 0xffffffff;
 	} else {
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35)
-		struct dev_mc_list *mclist;
-		unsigned int i;
-
-		mc_filter[1] = mc_filter[0] = 0;
-		for (i = 0, mclist = netdev->mc_list;
-		     mclist && i < netdev->mc_count;
-		     i++, mclist = mclist->next) {
-			int bit_nr;
-
-			bit_nr = ether_crc(ETH_ALEN, mclist->dmi_addr) >> 26;
-			mc_filter[bit_nr >> 5] |= 1 << (bit_nr & 31);
-			ocp_data |= RCR_AM;
-		}
-#else
 		struct netdev_hw_addr *ha;
 
 		mc_filter[1] = 0;
@@ -2752,7 +2737,6 @@ static void rtl8152_set_rx_mode(struct net_device *netdev)
 			mc_filter[bit_nr >> 5] |= 1 << (bit_nr & 31);
 			ocp_data |= RCR_AM;
 		}
-#endif
 	}
 
 	tmp[0] = __cpu_to_le32(swab32(mc_filter[1]));
