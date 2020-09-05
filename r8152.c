@@ -9268,9 +9268,7 @@ static void r8153_init(struct r8152 *tp)
 
 	switch (tp->udev->speed) {
 	case USB_SPEED_SUPER:
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,6,0)
 	case USB_SPEED_SUPER_PLUS:
-#endif
 		tp->coalesce = COALESCE_SUPER;
 		break;
 	case USB_SPEED_HIGH:
