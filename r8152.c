@@ -2822,33 +2822,6 @@ static netdev_tx_t rtl8152_start_xmit(struct sk_buff *skb,
 {
 	struct r8152 *tp = netdev_priv(netdev);
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(3,18,4)
-	if (unlikely(!rtl_gso_check(netdev, skb))) {
-		netdev_features_t features = netdev->features;
-		struct sk_buff *segs, *nskb;
-
-		features &= ~(NETIF_F_TSO | NETIF_F_TSO6);
-		segs = skb_gso_segment(skb, features);
-		if (IS_ERR(segs) || !segs)
-			goto free_skb;
-
-		do {
-			nskb = segs;
-			segs = segs->next;
-			nskb->next = NULL;
-			rtl8152_start_xmit(nskb, netdev);
-		} while (segs);
-
-free_skb:
-		dev_kfree_skb_any(skb);
-
-		return NETDEV_TX_OK;
-	}
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,31)
-	netdev->trans_start = jiffies
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,31) */
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3,18,4) */
-
 	skb_tx_timestamp(skb);
 
 	skb_queue_tail(&tp->tx_queue, skb);
