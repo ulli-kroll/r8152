@@ -8904,24 +8904,6 @@ static inline void __rtl_hw_phy_work_func(struct r8152 *tp)
 	usb_autopm_put_interface(tp->intf);
 }
 
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,20)
-
-static void rtl_work_func_t(void *data)
-{
-	struct r8152 *tp = (struct r8152 *)data;
-
-	__rtl_work_func(tp);
-}
-
-static void rtl_hw_phy_work_func_t(void *data)
-{
-	struct r8152 *tp = (struct r8152 *)data;
-
-	__rtl_hw_phy_work_func(tp);
-}
-
-#else
-
 static void rtl_work_func_t(struct work_struct *work)
 {
 	struct r8152 *tp = container_of(work, struct r8152, schedule.work);
@@ -8935,8 +8917,6 @@ static void rtl_hw_phy_work_func_t(struct work_struct *work)
 
 	__rtl_hw_phy_work_func(tp);
 }
-
-#endif
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23) && defined(CONFIG_PM_SLEEP)
 static int rtl_notifier(struct notifier_block *nb, unsigned long action,
