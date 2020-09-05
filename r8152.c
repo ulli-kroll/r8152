@@ -16979,20 +16979,11 @@ static int rtl8152_change_mtu(struct net_device *dev, int new_mtu)
 	case RTL_VER_01:
 	case RTL_VER_02:
 	case RTL_VER_07:
-#if LINUX_VERSION_CODE < KERNEL_VERSION(4,10,0)
-		return eth_change_mtu(dev, new_mtu);
-#else
 		dev->mtu = new_mtu;
 		return 0;
-#endif
 	default:
 		break;
 	}
-
-#if LINUX_VERSION_CODE < KERNEL_VERSION(4,10,0)
-	if (new_mtu < 68 || new_mtu > RTL8153_MAX_MTU)
-		return -EINVAL;
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(4,10,0) */
 
 	ret = usb_autopm_get_interface(tp->intf);
 	if (ret < 0)
