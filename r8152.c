@@ -18487,8 +18487,6 @@ static int rtl8152_probe(struct usb_interface *intf,
 			    NETIF_F_TSO | NETIF_F_FRAGLIST | NETIF_F_IPV6_CSUM |
 			    NETIF_F_TSO6 | NETIF_F_HW_VLAN_CTAG_RX |
 			    NETIF_F_HW_VLAN_CTAG_TX;
-
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39)
 	netdev->hw_features = NETIF_F_RXCSUM | NETIF_F_IP_CSUM | NETIF_F_SG |
 			      NETIF_F_TSO | NETIF_F_FRAGLIST |
 			      NETIF_F_IPV6_CSUM | NETIF_F_TSO6 |
@@ -18496,13 +18494,10 @@ static int rtl8152_probe(struct usb_interface *intf,
 	netdev->vlan_features = NETIF_F_SG | NETIF_F_IP_CSUM | NETIF_F_TSO |
 				NETIF_F_HIGHDMA | NETIF_F_FRAGLIST |
 				NETIF_F_IPV6_CSUM | NETIF_F_TSO6;
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39) */
 
 	if (tp->version == RTL_VER_01) {
 		netdev->features &= ~NETIF_F_RXCSUM;
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39)
 		netdev->hw_features &= ~NETIF_F_RXCSUM;
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,39) */
 	}
 
 	if (le16_to_cpu(udev->descriptor.idVendor) == VENDOR_ID_LENOVO)
