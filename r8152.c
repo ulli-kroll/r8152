@@ -5036,7 +5036,6 @@ static inline void r8152_mmd_indirect(struct r8152 *tp, u16 dev, u16 reg)
 	ocp_reg_write(tp, OCP_EEE_AR, FUN_DATA | dev);
 }
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)
 static u16 r8152_mmd_read(struct r8152 *tp, u16 dev, u16 reg)
 {
 	u16 data;
@@ -5047,7 +5046,6 @@ static u16 r8152_mmd_read(struct r8152 *tp, u16 dev, u16 reg)
 
 	return data;
 }
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0) */
 
 static void r8152_mmd_write(struct r8152 *tp, u16 dev, u16 reg, u16 data)
 {
