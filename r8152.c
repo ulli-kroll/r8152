@@ -2492,20 +2492,6 @@ static int rx_bottom(struct r8152 *tp, int budget)
 			skb->dev = netdev;
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22) */
 			skb->protocol = eth_type_trans(skb, netdev);
-
-#if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
-			if (work_done < budget) {
-				if (!rtl_rx_vlan_tag(tp, rx_desc, skb))
-					napi_gro_receive(napi, skb);
-				netdev->last_rx = jiffies;
-				work_done++;
-				stats->rx_packets++;
-				stats->rx_bytes += skb->len;
-			} else {
-				rtl_vlan_put_tag(tp, rx_desc, skb);
-				__skb_queue_tail(&tp->rx_queue, skb);
-			}
-#else
 			rtl_rx_vlan_tag(rx_desc, skb);
 			if (work_done < budget) {
 				work_done++;
@@ -2515,7 +2501,6 @@ static int rx_bottom(struct r8152 *tp, int budget)
 			} else {
 				__skb_queue_tail(&tp->rx_queue, skb);
 			}
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0) */
 
 find_next_rx:
 			rx_data = rx_agg_align(rx_data + pkt_len + ETH_FCS_LEN);
