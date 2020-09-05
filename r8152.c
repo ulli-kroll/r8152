@@ -2385,26 +2385,13 @@ static int rx_bottom(struct r8152 *tp, int budget)
 			struct net_device *netdev = tp->netdev;
 			struct net_device_stats *stats;
 			unsigned int pkt_len;
-#if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
-			u16 vlan_tci;
-#endif
 
 			if (!skb)
 				break;
 
 			pkt_len = skb->len;
 			stats = &netdev->stats;
-#if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
-			vlan_tci = rtl_vlan_get_tag(skb);
-
-			if (vlan_tci)
-				vlan_gro_receive(napi, tp->vlgrp, vlan_tci,
-						 skb);
-			else
-				napi_gro_receive(napi, skb);
-#else
 			napi_gro_receive(napi, skb);
-#endif
 
 			work_done++;
 			stats->rx_packets++;
