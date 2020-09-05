@@ -811,9 +811,6 @@ struct r8152 {
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
 	struct vlan_group *vlgrp;
 #endif
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,22)
-	struct net_device_stats stats;
-#endif
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23) && defined(CONFIG_PM_SLEEP)
 	struct notifier_block pm_notifier;
 #endif
