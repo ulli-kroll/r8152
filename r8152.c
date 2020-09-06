@@ -17952,10 +17952,8 @@ static int rtl8152_probe(struct usb_interface *intf,
 	tasklet_init(&tp->tx_tl, bottom_half, (unsigned long)tp);
 	tasklet_disable(&tp->tx_tl);
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,2,3)
 	if (usb_device_no_sg_constraint(udev))
 		tp->sg_use = true;
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(5,2,3) */
 
 	netdev->netdev_ops = &rtl8152_netdev_ops;
 	netdev->watchdog_timeo = RTL8152_TX_TIMEOUT;
