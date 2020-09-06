@@ -30,7 +30,6 @@
 #include <linux/suspend.h>
 #include <linux/atomic.h>
 #include <linux/acpi.h>
-#include "compatibility.h"
 
 /* Version Information */
 #define DRIVER_VERSION "v2.13.0 (2020/04/20)"
