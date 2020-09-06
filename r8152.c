@@ -808,7 +808,7 @@ struct r8152 {
 	struct delayed_work schedule, hw_phy_work;
 	struct mii_if_info mii;
 	struct mutex control;	/* use for hw setting */
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23) && defined(CONFIG_PM_SLEEP)
+#if defined(CONFIG_PM_SLEEP)
 	struct notifier_block pm_notifier;
 #endif
 	struct tasklet_struct tx_tl;
@@ -8918,7 +8918,7 @@ static void rtl_hw_phy_work_func_t(struct work_struct *work)
 	__rtl_hw_phy_work_func(tp);
 }
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23) && defined(CONFIG_PM_SLEEP)
+#if defined(CONFIG_PM_SLEEP)
 static int rtl_notifier(struct notifier_block *nb, unsigned long action,
 			void *data)
 {
@@ -9006,7 +9006,7 @@ static int rtl8152_open(struct net_device *netdev)
 	mutex_unlock(&tp->control);
 
 	usb_autopm_put_interface(tp->intf);
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23) && defined(CONFIG_PM_SLEEP)
+#if defined(CONFIG_PM_SLEEP)
 	tp->pm_notifier.notifier_call = rtl_notifier;
 	register_pm_notifier(&tp->pm_notifier);
 #endif
@@ -9026,7 +9026,7 @@ static int rtl8152_close(struct net_device *netdev)
 	struct r8152 *tp = netdev_priv(netdev);
 	int res = 0;
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23) && defined(CONFIG_PM_SLEEP)
+#if defined(CONFIG_PM_SLEEP)
 	unregister_pm_notifier(&tp->pm_notifier);
 #endif
 	tasklet_disable(&tp->tx_tl);
