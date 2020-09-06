@@ -3,3 +3,4 @@
 *r8152.o*
 Module.symvers
 modules.order
+.*.cmd
