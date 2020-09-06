@@ -5,10 +5,6 @@
  * Definition and macro
  */
 
-#include <linux/init.h>
-#include <linux/version.h>
-#include <linux/in.h>
-
 #ifndef FALSE
 	#define TRUE	1
 	#define FALSE	0
