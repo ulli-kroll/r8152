@@ -5084,40 +5084,6 @@ static void r8152b_enter_oob(struct r8152 *tp)
 	ocp_write_dword(tp, MCU_TYPE_PLA, PLA_RCR, ocp_data);
 }
 
-static int r8156_lock_mian(struct r8152 *tp, bool lock)
-{
-	u16 data;
-	int i;
-
-	data = ocp_reg_read(tp, 0xa46a);
-	if (lock)
-		data |= BIT(1);
-	else
-		data &= ~BIT(1);
-	ocp_reg_write(tp, 0xa46a, data);
-
-	if (lock) {
-		for (i = 0; i < 100; i++) {
-			usleep_range(1000, 2000);
-			data = ocp_reg_read(tp, 0xa730) & 0xff;
-			if (data == 1)
-				break;
-		}
-	} else {
-		for (i = 0; i < 100; i++) {
-			usleep_range(1000, 2000);
-			data = ocp_reg_read(tp, 0xa730) & 0xff;
-			if (data != 1)
-				break;
-		}
-	}
-
-	if (i == 100)
-		return -ETIME;
-	else
-		return 0;
-}
-
 static void r8153_wdt1_end(struct r8152 *tp)
 {
 	int i;
