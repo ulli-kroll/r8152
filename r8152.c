@@ -6415,10 +6415,6 @@ static void r8153b_firmware(struct r8152 *tp)
 	}
 }
 
-static void r8156_firmware(struct r8152 *tp)
-{
-}
-
 static void r8153_aldps_en(struct r8152 *tp, bool enable)
 {
 	u16 data;
