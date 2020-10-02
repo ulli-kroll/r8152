@@ -15490,16 +15490,16 @@ static int rtl8152_probe(struct usb_interface *intf,
 
 	usb_set_intfdata(intf, tp);
 
-	if (tp->support_2500full)
-		netif_napi_add(netdev, &tp->napi, r8152_poll, 256);
-	else
-		netif_napi_add(netdev, &tp->napi, r8152_poll, 64);
-
 	ret = register_netdev(netdev);
 	if (ret != 0) {
 		dev_err(&intf->dev, "couldn't register the device\n");
 		goto out1;
 	}
+
+	if (tp->support_2500full)
+		netif_napi_add(netdev, &tp->napi, r8152_poll, 256);
+	else
+		netif_napi_add(netdev, &tp->napi, r8152_poll, 64);
 
 	if (tp->saved_wolopts)
 		device_set_wakeup_enable(&udev->dev, true);
