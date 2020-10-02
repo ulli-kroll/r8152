@@ -37,10 +37,6 @@
 #define DRIVER_DESC "Realtek RTL8152/RTL8153 Based USB Ethernet Adapters"
 #define MODULENAME "r8152"
 
-#define PATENTS		"This product is covered by one or more of the " \
-			"following patents:\n" \
-			"\t\tUS6,570,884, US6,115,776, and US6,327,625.\n"
-
 #define R8152_PHY_ID		32
 
 #define PLA_IDR			0xc000
@@ -16169,7 +16165,6 @@ static int rtl8152_probe(struct usb_interface *intf,
 	/* usb_enable_autosuspend(udev); */
 
 	netif_info(tp, probe, netdev, "%s\n", DRIVER_VERSION);
-	netif_info(tp, probe, netdev, "%s\n", PATENTS);
 
 	ret = sysfs_create_group(&netdev->dev.kobj, &rtk_adv_grp);
 	if (ret < 0) {
