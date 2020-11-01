@@ -10,8 +10,10 @@ for building type
 for load the driver  
 `sudo insmod r8152.ko`  
 
-PLEASE NOTE !  
+<u>PLEASE NOTE !</u>  
 you must maybe remove upstream module 
+
+Tested on x86_64 and arm64 devices  
 
 **STATUS**  
 Currently as educational driver,  
@@ -21,9 +23,7 @@ sorry guys I don't care If use older ones
 
 **TODO**, will work on if I have enough time,  
 - ethtool support for 2500Mpbs in kernel ?  
-- 2500 Mbps only on USB3 interfaces flag ?  
-- minor crosscompile check ?  
-- rip out firmware blobs  
-- prepare for upstream ?  
+- catch up with upstream driver to
+- rip out firmware blobs / logic  
 
 Hans Ulli Kroll <linux@ulli-kroll.de>
