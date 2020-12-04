@@ -15,6 +15,19 @@ you must maybe remove upstream module
 
 Tested on x86_64 and arm64 devices  
 
+**NOTE ABOUT MASTER BRANCH**
+
+due the fact Realtek releases it's r8152 driver  
+as tar archive, it's not possible to make  
+the master branch **pullable**  
+master will follow the most recent development branch.  
+
+you should do  
+`git reset origin/master --hard`  
+
+soyy for the inconvenience
+
+
 **STATUS**  
 Currently as educational driver,  
 
